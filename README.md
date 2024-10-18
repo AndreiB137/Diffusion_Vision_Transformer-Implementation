@@ -32,7 +32,7 @@ If you find this repository useful, please cite the following:
 ```
 @misc{Bodnar2024DiffiT_Implementation,
   author = {Bodnar, Andrei},
-  title = {Diffusion_Vision_Transformer_Implementation},
+  title = {Diffusion_Vision_Transformer-Implementation},
   year = {2024},
   publisher = {GitHub},
   journal = {GitHub repository},
