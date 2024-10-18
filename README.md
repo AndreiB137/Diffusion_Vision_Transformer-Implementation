@@ -15,7 +15,7 @@ In these models we start by sampling images from an unknown probability distribu
 
 ### Mathematical details
 
-The full description is in "DDPM_Notes". 
+The full description is in ["Diffusion_model_basic"](https://github.com/AndreiB137/Diffusion_Vision_Transformer-Implementation/blob/main/Diffusion_model_basic.pdf). I would recommend read them and the details below at the same time. 
 
 There are a few (if not many) questions regarding the discussion above. Firstly, what is the mean and variance of the Gaussian forward process? Do we have to learn both the mean and variance in the Gaussian reverse process? Secondly, how many steps T should we have? How to design the noising process such that at step $T$ we have a normal distribution with 0 mean and variance 1?
 
