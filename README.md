@@ -25,7 +25,24 @@ The loss function is as usual in variatonal problems, minimizing a variational l
 
 ## Improved DDPM and optimized sampling
 
+## Citation
 
+If you find this repository useful, please cite the following:
+
+```
+@misc{Bodnar2024DiffiT_Implementation,
+  author = {Bodnar, Andrei},
+  title = {Diffusion_Vision_Transformer_Implementation},
+  year = {2024},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  howpublished = {\url{https://github.com/AndreiB137/Graph-Convolutions-and-NGD-Optimization}},
+}
+```
+
+## Licence
+
+[![License](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](LICENSE)
 
 
 
