@@ -36,7 +36,7 @@ If you find this repository useful, please cite the following:
   year = {2024},
   publisher = {GitHub},
   journal = {GitHub repository},
-  howpublished = {\url{https://github.com/AndreiB137/Graph-Convolutions-and-NGD-Optimization}},
+  howpublished = {\url{https://github.com/AndreiB137/Diffusion_Vision_Transformer-Implementation}},
 }
 ```
 
