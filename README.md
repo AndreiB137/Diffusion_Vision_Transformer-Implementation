@@ -4,6 +4,16 @@ This repository is meant to give an overview of diffusion models alongside with 
 
 ## Table of contents
 
+* [Introduction to Diffusion Models](#Introduction-to-Diffusion-Models)
+    * [Overview](#Overview)
+    * [Mathematical details](#Mathematical-details)
+* [Improved Diffusion Models](#Improved-DDPM,-schedulers-and-optimized-sampling)
+    * [Improved DDPM](#Improved-DDPM)
+    * [Schedules](#Schedules)
+    * [Optimized sampling](#Fast-sampling-with-non-Markovian-distributions)
+* [Introduction to Vision Transformer](#Introduction-to-DiffiT)
+* [Overview](#Overview-of-the-model)
+* [Implementation](#Implementation)
 
 ## Introduction to Diffusion Models
 
@@ -19,7 +29,7 @@ The full description is in ["Diffusion_model_basic"](https://github.com/AndreiB1
 
 There are a few (if not many) questions regarding the discussion above. Firstly, what is the mean and variance of the Gaussian forward process? Do we have to learn both the mean and variance in the Gaussian reverse process? Secondly, how many steps T should we have? How to design the noising process such that at step $T$ we have a normal distribution with 0 mean and variance 1?
 
-Indeed, there are lots of possibilities in designing the forward process, and thats because it might happen that the image is very noisy in a few steps which makes it even harder to train, or the added noise is small enough such that even us can recognise the initial image after those steps. One example is a linear increase in noise, or a cosine. Because the cosine is smoother (it has a slower decrease) than a line especially at the beginning and at the end of the $[0, \frac{\pi}{2}]$ interval, the first or last steps will be less changed for the cosine compared with the linear. I will let noise schedulers after we discuss optimizations of DPPM. In the [DPPM](https://arxiv.org/pdf/2006.11239) paper they have used $T = 1000$ and a linear scheduler, showing this approximately produces the desired normal distribution. Also, the samples at step $t$, $x_{t}$, given the initial image $x_{0}$ are $x_{t}=\sqrt{\alpha_{t}}x_{0}+\sqrt{1-\alpha_{t}}\epsilon$, where $\alpha_{t}$ $\rightarrow 0$ approximately as $t\rightarrow T \hspace{0.2cm}(1)$. Furthermore, we can choose to not parametrize the variance and let it be a constant dependent on the step $t$, so in the reverse process the Gaussian has the same variance as the posterior of the forward process (which can be exactly calculated because of our Gaussian assumption). Hence, the neural network will predict only the mean of the Gaussian at each step $t$. Additionaly, reparametrizing the mean equation with $(1)$ we see that is enough to predict $\epsilon$ with the neural network.
+Indeed, there are lots of possibilities in designing the forward process, and thats because it might happen that the image is very noisy in a few steps which makes it even harder to train, or the added noise is small enough such that even us can recognise the initial image after those steps. One example is a linear increase in noise, or a cosine. Because the cosine is smoother (it has a slower decrease) than a line especially at the beginning and at the end of the $[0, \frac{\pi}{2}]$ interval, the first or last steps will be less changed for the cosine compared with the linear. I will let noise schedulers after we discuss optimizations of DPPM. In the [DPPM](https://arxiv.org/pdf/2006.11239) paper they have used $T = 1000$ and a linear scheduler, showing this approximately produces the desired normal distribution. Also, the samples at step $t$, $x_{t}$, given the initial image $x_{0}$ are $x_{t}=\sqrt{\alpha_{t}}x_{0}+\sqrt{1-\alpha_{t}}\epsilon$, where $\epsilon \sim \mathcal{N}(0, I)$ and $\alpha_{t}$ $\rightarrow 0$ approximately as $t\rightarrow T \hspace{0.2cm}(1)$. Furthermore, we can choose to not parametrize the variance and let it be a constant dependent on the step $t$, so in the reverse process the Gaussian has the same variance as the posterior of the forward process (which can be exactly calculated because of our Gaussian assumption). Hence, the neural network will predict only the mean of the Gaussian at each step $t$. Additionaly, reparametrizing the mean equation with $(1)$ we see that is enough to predict $\epsilon$ with the neural network.
 
 The loss function is as usual in variatonal problems, minimizing a variational lower bound over the joint of the reverse and forward process which decouple into sums of KL-divergences after factorization.
 
@@ -31,9 +41,20 @@ In principle, if there is to optimize the model, it is the training process, sam
 
 One of the first papers to suggest improvements to DDPM is [IDDPM](https://arxiv.org/pdf/2102.09672). These modifications are very natural, in the sense they represent a first glance approach on what would you consider to test to check whether the improvements are notable. First of all, they found that changing $T$ from 1000 to 4000 gave a slight decrease in the loss across all tests. Next, they propose not to fix the variance, but to parametrize it with a neural network. Since the ELBO defined previously doesen't train the variance (it is constant), they add a new ELBO term that stops gradients for the mean, but trains only the parametrized variance. This new term is also scaled by a very small constant for the model to prioritize the first ELBO. Secondly, they change the linear schedule to a cosine schedule. This gives less noise in the final steps (Figure 1), making it easier for the network to learn because the image destruction is slower. 
 
-### Schedulers
+### Schedules
 
-I don't want to insist on the cosine schedule because we are going to generalize and extend the idea to a family of specific schedulers. In particular, the one that achieves best scores if the Laplace scheduler. Everything in this sub-section is following the results in the original [paper](https://arxiv.org/pdf/2407.03297). In ["Scheduler_notes"](https://github.com/AndreiB137/Diffusion_Vision_Transformer-Implementation/blob/main/Noise_schedule_notes.pdf) 
+I don't want to insist on the cosine schedule because we are going to generalize and extend the idea to a family of specific schedulers. In particular, the one that achieves best scores if the Laplace scheduler. Everything in this sub-section is following the results in the original [paper](https://arxiv.org/pdf/2407.03297). In ["Scheduler_notes"](https://github.com/AndreiB137/Diffusion_Vision_Transformer-Implementation/blob/main/Noise_schedule_notes.pdf) we see that using an arbitrary noise schedule, there is a new term in the ELBO (or variational lower bound) that multiplies the previous inside the expectation. This new term behaves to give a relative weight to training at step t, but at the same time a probability distribution over the steps, so that other are prioritized (for example noisy samples at the first steps might have a higher probability). In Figure 2, there is a comparison between Laplace and other noise schedules, showing a roughly 40% improvement over the cosine. It is notable to say that in the paper there were only a few noise schedules considered, and there is an open question about others. Even so, a 40% boost only from only modifying the SNR is substantial.
+
+### Fast sampling with non-Markovian distributions
+
+
+## Introduction to DiffiT
+
+### Overview of the model
+
+### Implementation
+
+## Acknowledgements
 
 ## Citation
 
