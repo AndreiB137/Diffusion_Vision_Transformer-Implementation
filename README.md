@@ -23,11 +23,17 @@ Indeed, there are lots of possibilities in designing the forward process, and th
 
 The loss function is as usual in variatonal problems, minimizing a variational lower bound over the joint of the reverse and forward process which decouple into sums of KL-divergences after factorization.
 
-## Improved DDPM and optimized sampling
+## Improved DDPM, schedulers and optimized sampling
+
+### Improved DDPM
 
 In principle, if there is to optimize the model, it is the training process, sampling process or both where to make changes. In this section we will focus on sampling, while the Vision Transformer is adopting a new neural network architecture, which can be thought of as changing both processes. Furthermore, incorporating different family of forward distributions is a possibility if the KL-divergence can have an exact computation, otherwise the Gaussian remains a great option just because can be directly scaled to training on a large scale, where time management and efficiency is key. Moreover, when training for very long times the differences might be insignificant. 
 
-One of the first papers to suggest improvements to DDPM is [IDDPM](https://arxiv.org/pdf/2102.09672). These modifications are very natural, in the sense they represent a first glance approach on what would you consider to test to check whether the improvements are notable. First of all, they found that changing $T$ from 1000 to 4000 gave a slight decrease in the loss across all tests. Next, they propose not to fix the variance, but to parametrize it with a neural network. Since the ELBO defined previously doesen't train the variance (it is constant), they add a new ELBO term that stops gradients for the mean, but trains only the parametrized variance. This new term is also scaled by a very small constant for the model to prioritize the first ELBO. Secondly, they change the linear schedule to a cosine schedule. This gives less noise in the final steps (Figure 1), making it easier for the network to learn. 
+One of the first papers to suggest improvements to DDPM is [IDDPM](https://arxiv.org/pdf/2102.09672). These modifications are very natural, in the sense they represent a first glance approach on what would you consider to test to check whether the improvements are notable. First of all, they found that changing $T$ from 1000 to 4000 gave a slight decrease in the loss across all tests. Next, they propose not to fix the variance, but to parametrize it with a neural network. Since the ELBO defined previously doesen't train the variance (it is constant), they add a new ELBO term that stops gradients for the mean, but trains only the parametrized variance. This new term is also scaled by a very small constant for the model to prioritize the first ELBO. Secondly, they change the linear schedule to a cosine schedule. This gives less noise in the final steps (Figure 1), making it easier for the network to learn because the image destruction is slower. 
+
+### Schedulers
+
+I don't want to insist on the cosine schedule because we are going to generalize and extend the idea to a family of specific schedulers. In particular, the one that achieves best scores if the Laplace scheduler. Everything in this sub-section is following the results in the original [paper](https://arxiv.org/pdf/2407.03297). In ["Scheduler_notes"](https://github.com/AndreiB137/Diffusion_Vision_Transformer-Implementation/blob/main/Noise_schedule_notes.pdf) 
 
 ## Citation
 
