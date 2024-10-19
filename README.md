@@ -12,8 +12,8 @@ This repository is meant to give an overview of diffusion models alongside with 
     * [Schedules](#Schedules)
     * [Optimized sampling](#Fast-sampling-with-non-Markovian-distributions)
 * [Introduction to Vision Transformer](#Introduction-to-DiffiT)
-* [Overview](#Overview-of-the-model)
-* [Implementation](#Implementation)
+   * [Overview](#Overview-of-the-model)
+   * [Implementation](#Implementation)
 
 ## Introduction to Diffusion Models
 
