@@ -33,7 +33,7 @@ Indeed, there are lots of possibilities in designing the forward process, and th
 
 The loss function is as usual in variatonal problems, minimizing a variational lower bound over the joint of the reverse and forward process which decouple into sums of KL-divergences after factorization.
 
-## Improved DDPM, schedulers and optimized sampling
+## Improved DDPM, schedules and optimized sampling
 
 ### Improved DDPM
 
