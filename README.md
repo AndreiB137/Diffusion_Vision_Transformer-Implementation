@@ -57,7 +57,9 @@ It was remnarked in the [DDPIM](https://arxiv.org/pdf/2010.02502) paper that the
 
 ### Implementation
 
-There is a table with the architecture in the paper, although tables S.2,S.3 have some possible typos. The resblock should keep the same dimensions of the feature maps. In S.3 this is the case, but in S.2 the resblock $L_{2}$ outputs 256, while the input is 128. My implementation follows almost all the hyperparameters presented, but some minor changes have to be made in order to train on my computer. I haven't seen to be mentioned anything about a fast sampling technique, but I will also test non-Markovian sampling with around 100 steps instead of 1K, and Laplace noise schedule. The model is very computationally heavy and requires good GPUs, therefore I hope at some point to add some image generation results to this repository. 
+There is a table with the architecture in the paper, although tables S.2,S.3 have some possible typos. The resblock should keep the same dimensions of the feature maps. In S.3 this is the case, but in S.2 the resblock $L_{2}$ outputs 256, while the input is 128. My implementation follows almost all the hyperparameters presented, but some minor changes have to be made in order to train on my computer. I haven't seen to be mentioned anything about a fast sampling technique, but I will also test non-Markovian sampling with around 100 steps instead of 1K, and Laplace noise schedule. The model is very computationally heavy and requires good GPUs, therefore I hope at some point to add some image generation results to this repository. Also, I can't test my implementation because is very demanding, even on Colab or other free GPU platforms.
+
+The $\sigma_{t}$ hyperparameter in DDPIM was set to zero (so the denoising trajectory is no longer probabilistic, but deterministic), except when $t=1$ (a normal distribution as in the paper). The layers were designed to work only with powers of two, but I want to let the user choose how many upsampling (this determines the downsampling) layers to be.
 
 ## Acknowledgements
 
