@@ -64,6 +64,7 @@ There is a table with the architecture in the paper, although tables S.2,S.3 hav
 * [DDPIM](https://arxiv.org/pdf/2010.02502)
 * [DiffiT](https://arxiv.org/pdf/2312.02139)
 * [IDDPM](https://arxiv.org/pdf/2102.09672)
+* [INSDT](https://arxiv.org/pdf/2407.03297)
 
 ## Citation
 
