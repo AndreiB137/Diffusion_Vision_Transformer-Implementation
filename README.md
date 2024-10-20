@@ -1,6 +1,6 @@
 # Diffusion_Vision_Transformer-Implementation
 
-This repository is meant to give an overview of diffusion models alongside with an example of the current state of the art DDPM model according to FID score on ImageNet 264x264 dataset and others. The presentation will follow most of the details in the original paper ["Diffusion Vision Transformers for Image Generation"](https://arxiv.org/pdf/2312.02139). Due to most of the ideas in the paper are based on previous implementations, there will be a broader discussion to how all of them are combined into one single model. I should mention that many of the arguments are empirical (it has been testest, and some ideas give a better score than others), even though we can come up with high level arguments why do we think we should expect improvements if we choose an architecture rather than other.
+This repository is meant to give an overview of diffusion models alongside with an example of the current state of the art DDPM model according to FID score on ImageNet 256x256 dataset and others. The presentation will follow most of the details in the original paper ["Diffusion Vision Transformers for Image Generation"](https://arxiv.org/pdf/2312.02139). Due to most of the ideas in the paper are based on previous implementations, there will be a broader discussion to how all of them are combined into one single model. I should mention that many of the arguments are empirical (it has been testest, and some ideas give a better score than others), even though we can come up with high level arguments why do we think we should expect improvements if we choose an architecture rather than other.
 
 ## Table of contents
 
@@ -53,9 +53,17 @@ It was remnarked in the [DDPIM](https://arxiv.org/pdf/2010.02502) paper that the
 
 ### Overview of the model
 
+[DiffiT](https://arxiv.org/pdf/2312.02139) exploits the use of transformers in the encoder and decoder of the U-Net. Thus, feature maps "talk to each other" as in LLMs. The neural network is forced to learn the underlying relations between the feature maps. Although, transformers could be seen as a natural try to incorporate in a new architecture. The novel idea presented is the projection of both time and spatial embeddings into a shared space. As you saw in the first U-Net models, the time embedding was projected on the spatial part. Now, both time and space are projected. This was named by the authors "Time-dependent Self-Attention" and is the reason why the model is called "vision transformer". There will be 6 linear projections in total, defining $q_{s}=x_{s}W_{qs}+x_{t}W_{qt}$, $k_{s}=x_{s}W_{ks}+x_{t}W_{kt}$, $v_{s}=x_{s}W_{vs}+x_{t}W_{vt}$, the queries, keys and values, respectively. Then, these are combined into a multi-head self attention. The model achieves a $1.73$ FID score on ImageNet-256 making it a state-of-the art model for this dataset. But, its performances are very close to other models across many datasets. It is worth mentioning that is one of the few architectures that achieve very competitive FID score both for low and high resolution image generation. 
+
 ### Implementation
 
+There is a table with the architecture in the paper, although tables S.2,S.3 have some possible typos. The resblock should keep the same dimensions of the feature maps. In S.3 this is the case, but in S.2 the resblock $L_{2}$ outputs 256, while the input is 128. My implementation follows almost all the hyperparameters presented, but some minor changes have to be made in order to train on my computer. I haven't seen to be mentioned anything about a fast sampling technique, but I will also test non-Markovian sampling with around 100 steps instead of 1K, and Laplace noise schedule. The model is very computationally heavy and requires good GPUs, therefore I hope at some point to add some image generation results to this repository. 
+
 ## Acknowledgements
+
+* [DDPIM](https://arxiv.org/pdf/2010.02502)
+* [DiffiT](https://arxiv.org/pdf/2312.02139)
+* [IDDPM](https://arxiv.org/pdf/2102.09672)
 
 ## Citation
 
