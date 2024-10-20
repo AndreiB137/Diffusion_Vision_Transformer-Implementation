@@ -9,13 +9,6 @@ from torchvision.transforms import transforms
 import matplotlib.pyplot as plt
 from torch.utils.data import DataLoader
 
-dataset = CIFAR10(root = "CIFAR10", train = True, transform = 
-                  transforms.Compose([
-                      transforms.ToTensor(),
-                      transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
-                  ]), download=True)
-dataset = DataLoader(dataset, batch_size = 16, shuffle = True)
-
 class TMSA(nn.Module):
     def __init__(self, time_emb_dim, num_heads, in_features):
         super().__init__()
@@ -304,28 +297,10 @@ class Diffusion_Model(nn.Module):
     
 
 # Training
-    
-save_model_filepath = '/Users/andrei/Documents/Deep Learning Training/DiffusionCheckpoints/CheckpointDiffusion.pth'
 
 
 model = Diffusion_Model(steps = 100, checkpoint=checkpoint, load_checkpoint=load_checkpoint, 
-                        save_model_filepath=save_model_filepath,
+                        save_model_filepath="File location",
                         t_max = 0.99, diffusion_time=1000, time_emb_dim=256, 
                         res_block_repeat=[1, 1, 1, 1, 1, 1], in_channels=3, batch_size=16, 
                         input_dim=32, num_heads=1, starting_features=32)
-
-model.load_checkpoint(model, save_model_filepath)
-
-def train(epochs):
-    for i in tqdm(range(epochs)):
-        for j, img in tqdm(enumerate(dataset)):
-            loss = model(img[0])
-            if j % 100 == 0:
-                print(f"The loss at epoch {i} and image {j} is {loss.item():.3f}")
-                model.checkpoint(model, model.save_model_filepath)
-            loss.backward()
-            model.optimizer.step()
-            model.optimizer.zero_grad()
-        
-
-train(100)
